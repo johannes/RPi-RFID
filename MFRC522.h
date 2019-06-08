@@ -26,7 +26,7 @@ typedef uint16_t word;
 // Reference values based on firmware version; taken from 16.1.1 in spec.
 // Version 1.0
 
-const byte MFRC522_firmware_referenceV1_0[]  = {
+const ::byte MFRC522_firmware_referenceV1_0[]  = {
 	0x00, 0xC6, 0x37, 0xD5, 0x32, 0xB7, 0x57, 0x5C,
 	0xC2, 0xD8, 0x7C, 0x4D, 0xD9, 0x70, 0xC7, 0x73,
 	0x10, 0xE6, 0xD2, 0xAA, 0x5E, 0xA1, 0x3E, 0x5A,
@@ -38,7 +38,7 @@ const byte MFRC522_firmware_referenceV1_0[]  = {
 };
 
 // Version 2.0
-const byte MFRC522_firmware_referenceV2_0[] = {
+const ::byte MFRC522_firmware_referenceV2_0[] = {
 	0x00, 0xEB, 0x66, 0xBA, 0x57, 0xBF, 0x23, 0x95,
 	0xD0, 0xE3, 0x0D, 0x3D, 0x27, 0x89, 0x5C, 0xDE,
 	0x9D, 0x3B, 0xA7, 0x00, 0x21, 0x5B, 0x89, 0x82,
@@ -174,21 +174,21 @@ public:
 		// The read/write commands can also be used for MIFARE Ultralight.
 		PICC_CMD_MF_AUTH_KEY_A	= 0x60,		// Perform authentication with Key A
 		PICC_CMD_MF_AUTH_KEY_B	= 0x61,		// Perform authentication with Key B
-		PICC_CMD_MF_READ		= 0x30,		// Reads one 16 byte block from the authenticated sector of the PICC. Also used for MIFARE Ultralight.
-		PICC_CMD_MF_WRITE		= 0xA0,		// Writes one 16 byte block to the authenticated sector of the PICC. Called "COMPATIBILITY WRITE" for MIFARE Ultralight.
+		PICC_CMD_MF_READ		= 0x30,		// Reads one 16 ::byte block from the authenticated sector of the PICC. Also used for MIFARE Ultralight.
+		PICC_CMD_MF_WRITE		= 0xA0,		// Writes one 16 ::byte block to the authenticated sector of the PICC. Called "COMPATIBILITY WRITE" for MIFARE Ultralight.
 		PICC_CMD_MF_DECREMENT	= 0xC0,		// Decrements the contents of a block and stores the result in the internal data register.
 		PICC_CMD_MF_INCREMENT	= 0xC1,		// Increments the contents of a block and stores the result in the internal data register.
 		PICC_CMD_MF_RESTORE		= 0xC2,		// Reads the contents of a block into the internal data register.
 		PICC_CMD_MF_TRANSFER	= 0xB0,		// Writes the contents of the internal data register to a block.
 		// The commands used for MIFARE Ultralight (from http://www.nxp.com/documents/data_sheet/MF0ICU1.pdf, Section 8.6)
 		// The PICC_CMD_MF_READ and PICC_CMD_MF_WRITE can also be used for MIFARE Ultralight.
-		PICC_CMD_UL_WRITE		= 0xA2		// Writes one 4 byte page to the PICC.
+		PICC_CMD_UL_WRITE		= 0xA2		// Writes one 4 ::byte page to the PICC.
 	};
 	
 	// MIFARE constants that does not fit anywhere else
 	enum MIFARE_Misc {
 		MF_ACK					= 0xA,		// The MIFARE Classic uses a 4 bit ACK/NAK. Any other value than 0xA is NAK.
-		MF_KEY_SIZE				= 6			// A Mifare Crypto1 key is 6 bytes.
+		MF_KEY_SIZE				= 6			// A Mifare Crypto1 key is 6 ::bytes.
 	};
 	
 	// PICC types we can detect. Remember to update PICC_GetTypeName() if you add more.
@@ -196,7 +196,7 @@ public:
 		PICC_TYPE_UNKNOWN		= 0,
 		PICC_TYPE_ISO_14443_4	= 1,	// PICC compliant with ISO/IEC 14443-4 
 		PICC_TYPE_ISO_18092		= 2, 	// PICC compliant with ISO/IEC 18092 (NFC)
-		PICC_TYPE_MIFARE_MINI	= 3,	// MIFARE Classic protocol, 320 bytes
+		PICC_TYPE_MIFARE_MINI	= 3,	// MIFARE Classic protocol, 320 ::bytes
 		PICC_TYPE_MIFARE_1K		= 4,	// MIFARE Classic protocol, 1KB
 		PICC_TYPE_MIFARE_4K		= 5,	// MIFARE Classic protocol, 4KB
 		PICC_TYPE_MIFARE_UL		= 6,	// MIFARE Ultralight or Ultralight C
@@ -220,21 +220,21 @@ public:
 	
 	// A struct used for passing the UID of a PICC.
 	typedef struct {
-		byte		size;			// Number of bytes in the UID. 4, 7 or 10.
-		byte		uidByte[10];
-		byte		sak;			// The SAK (Select acknowledge) byte returned from the PICC after successful selection.
+		::byte		size;			// Number of ::bytes in the UID. 4, 7 or 10.
+		::byte		uidByte[10];
+		::byte		sak;			// The SAK (Select acknowledge) ::byte returned from the PICC after successful selection.
 	} Uid;
 	
 	// A struct used for passing a MIFARE Crypto1 key
 	typedef struct {
-		byte		keyByte[MF_KEY_SIZE];
+		::byte		keyByte[MF_KEY_SIZE];
 	} MIFARE_Key;
 	
 	// Member variables
 	Uid uid;								// Used by PICC_ReadCardSerial().
 	
 	// Size of the MFRC522 FIFO
-	static const byte FIFO_SIZE = 64;		// The FIFO is 64 bytes.
+	static const ::byte FIFO_SIZE = 64;		// The FIFO is 64 ::bytes.
 	
 	/////////////////////////////////////////////////////////////////////////////////////
 	// Functions for setting up the Raspberry Pi
@@ -244,14 +244,14 @@ public:
 	/////////////////////////////////////////////////////////////////////////////////////
 	// Basic interface functions for communicating with the MFRC522
 	/////////////////////////////////////////////////////////////////////////////////////
-	void PCD_WriteRegister(byte reg, byte value);
-	void PCD_WriteRegister(byte reg, byte count, byte *values);
-	byte PCD_ReadRegister(byte reg);
-	void PCD_ReadRegister(byte reg, byte count, byte *values, byte rxAlign = 0);
+	void PCD_WriteRegister(::byte reg, ::byte value);
+	void PCD_WriteRegister(::byte reg, ::byte count, ::byte *values);
+	::byte PCD_ReadRegister(::byte reg);
+	void PCD_ReadRegister(::byte reg, ::byte count, ::byte *values, ::byte rxAlign = 0);
 	void setBitMask(unsigned char reg, unsigned char mask);
-	void PCD_SetRegisterBitMask(byte reg, byte mask);
-	void PCD_ClearRegisterBitMask(byte reg, byte mask);
-	byte PCD_CalculateCRC(byte *data, byte length, byte *result);
+	void PCD_SetRegisterBitMask(::byte reg, ::byte mask);
+	void PCD_ClearRegisterBitMask(::byte reg, ::byte mask);
+	::byte PCD_CalculateCRC(::byte *data, ::byte length, ::byte *result);
 	
 	/////////////////////////////////////////////////////////////////////////////////////
 	// Functions for manipulating the MFRC522
@@ -260,54 +260,54 @@ public:
 	void PCD_Reset();
 	void PCD_AntennaOn();
 	void PCD_AntennaOff();
-	byte PCD_GetAntennaGain();
-	void PCD_SetAntennaGain(byte mask);
+	::byte PCD_GetAntennaGain();
+	void PCD_SetAntennaGain(::byte mask);
 	bool PCD_PerformSelfTest();
 	
 	/////////////////////////////////////////////////////////////////////////////////////
 	// Functions for communicating with PICCs
 	/////////////////////////////////////////////////////////////////////////////////////
-	byte PCD_TransceiveData(byte *sendData, byte sendLen, byte *backData, byte *backLen, byte *validBits = NULL, byte rxAlign = 0, bool checkCRC = false);
-	byte PCD_CommunicateWithPICC(byte command, byte waitIRq, byte *sendData, byte sendLen, byte *backData = NULL, byte *backLen = NULL, byte *validBits = NULL, byte rxAlign = 0, bool checkCRC = false);
-	byte PICC_RequestA(byte *bufferATQA, byte *bufferSize);
-	byte PICC_WakeupA(byte *bufferATQA, byte *bufferSize);
-	byte PICC_REQA_or_WUPA(byte command, byte *bufferATQA, byte *bufferSize);
-	byte PICC_Select(Uid *uid, byte validBits = 0);
-	byte PICC_HaltA();
+	::byte PCD_TransceiveData(::byte *sendData, ::byte sendLen, ::byte *backData, ::byte *backLen, ::byte *validBits = NULL, ::byte rxAlign = 0, bool checkCRC = false);
+	::byte PCD_CommunicateWithPICC(::byte command, ::byte waitIRq, ::byte *sendData, ::byte sendLen, ::byte *backData = NULL, ::byte *backLen = NULL, ::byte *validBits = NULL, ::byte rxAlign = 0, bool checkCRC = false);
+	::byte PICC_RequestA(::byte *bufferATQA, ::byte *bufferSize);
+	::byte PICC_WakeupA(::byte *bufferATQA, ::byte *bufferSize);
+	::byte PICC_REQA_or_WUPA(::byte command, ::byte *bufferATQA, ::byte *bufferSize);
+	::byte PICC_Select(Uid *uid, ::byte validBits = 0);
+	::byte PICC_HaltA();
 	
 	/////////////////////////////////////////////////////////////////////////////////////
 	// Functions for communicating with MIFARE PICCs
 	/////////////////////////////////////////////////////////////////////////////////////
-	byte PCD_Authenticate(byte command, byte blockAddr, MIFARE_Key *key, Uid *uid);
+	::byte PCD_Authenticate(::byte command, ::byte blockAddr, MIFARE_Key *key, Uid *uid);
 	void PCD_StopCrypto1();
-	byte MIFARE_Read(byte blockAddr, byte *buffer, byte *bufferSize);
-	byte MIFARE_Write(byte blockAddr, byte *buffer, byte bufferSize);
-	byte MIFARE_Decrement(byte blockAddr, long delta);
-	byte MIFARE_Increment(byte blockAddr, long delta);
-	byte MIFARE_Restore(byte blockAddr);
-	byte MIFARE_Transfer(byte blockAddr);
-	byte MIFARE_Ultralight_Write(byte page, byte *buffer, byte bufferSize);
-	byte MIFARE_GetValue(byte blockAddr, long *value);
-	byte MIFARE_SetValue(byte blockAddr, long value);
+	::byte MIFARE_Read(::byte blockAddr, ::byte *buffer, ::byte *bufferSize);
+	::byte MIFARE_Write(::byte blockAddr, ::byte *buffer, ::byte bufferSize);
+	::byte MIFARE_Decrement(::byte blockAddr, long delta);
+	::byte MIFARE_Increment(::byte blockAddr, long delta);
+	::byte MIFARE_Restore(::byte blockAddr);
+	::byte MIFARE_Transfer(::byte blockAddr);
+	::byte MIFARE_Ultralight_Write(::byte page, ::byte *buffer, ::byte bufferSize);
+	::byte MIFARE_GetValue(::byte blockAddr, long *value);
+	::byte MIFARE_SetValue(::byte blockAddr, long value);
 	
 	/////////////////////////////////////////////////////////////////////////////////////
 	// Support functions
 	/////////////////////////////////////////////////////////////////////////////////////
-	byte PCD_MIFARE_Transceive(byte *sendData, byte sendLen, bool acceptTimeout = false);
+	::byte PCD_MIFARE_Transceive(::byte *sendData, ::byte sendLen, bool acceptTimeout = false);
 	// old function used too much memory, now name moved to flash; if you need char, copy from flash to memory
-	//const char *GetStatusCodeName(byte code);
-	const string GetStatusCodeName(byte code);
-	byte PICC_GetType(byte sak);
+	//const char *GetStatusCodeName(::byte code);
+	const string GetStatusCodeName(::byte code);
+	::byte PICC_GetType(::byte sak);
 	// old function used too much memory, now name moved to flash; if you need char, copy from flash to memory
-	//const char *PICC_GetTypeName(byte type);
-	const string PICC_GetTypeName(byte type);
+	//const char *PICC_GetTypeName(::byte type);
+	const string PICC_GetTypeName(::byte type);
 	void PICC_DumpToSerial(Uid *uid);
-	void PICC_DumpMifareClassicToSerial(Uid *uid, byte piccType, MIFARE_Key *key);
-	void PICC_DumpMifareClassicSectorToSerial(Uid *uid, MIFARE_Key *key, byte sector);
+	void PICC_DumpMifareClassicToSerial(Uid *uid, ::byte piccType, MIFARE_Key *key);
+	void PICC_DumpMifareClassicSectorToSerial(Uid *uid, MIFARE_Key *key, ::byte sector);
 	void PICC_DumpMifareUltralightToSerial();
-	void MIFARE_SetAccessBits(byte *accessBitBuffer, byte g0, byte g1, byte g2, byte g3);
+	void MIFARE_SetAccessBits(::byte *accessBitBuffer, ::byte g0, ::byte g1, ::byte g2, ::byte g3);
 	bool MIFARE_OpenUidBackdoor(bool logErrors);
-	bool MIFARE_SetUid(byte *newUid, byte uidSize, bool logErrors);
+	bool MIFARE_SetUid(::byte *newUid, ::byte uidSize, bool logErrors);
 	bool MIFARE_UnbrickUidSector(bool logErrors);
 	
 	/////////////////////////////////////////////////////////////////////////////////////
@@ -317,7 +317,7 @@ public:
 	bool PICC_ReadCardSerial();
 	
 private:
-	byte MIFARE_TwoStepHelper(byte command, byte blockAddr, long data);
+	::byte MIFARE_TwoStepHelper(::byte command, ::byte blockAddr, long data);
 };
 
 #endif
